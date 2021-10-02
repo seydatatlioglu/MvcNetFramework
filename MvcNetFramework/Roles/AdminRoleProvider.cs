@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BusinessLayer.Concrete;
+using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +11,15 @@ namespace MvcNetFramework.Roles
 {
     public class AdminRoleProvider : RoleProvider
     {
+        IAdminDal _adminDal;
+
+        public AdminRoleProvider(IAdminDal adminDal)
+        {
+            _adminDal = adminDal;
+        }
+
+
+
         public override string ApplicationName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
@@ -37,7 +49,8 @@ namespace MvcNetFramework.Roles
 
         public override string[] GetRolesForUser(string username)
         {
-            throw new NotImplementedException();
+            var role = _adminDal.Get(a => a.AdminUserName==username);
+            return new string[] { role.AdminRole };
         }
 
         public override string[] GetUsersInRole(string roleName)

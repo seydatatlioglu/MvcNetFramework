@@ -9,6 +9,6 @@ namespace BusinessLayer.Abstract
         void AdminAdd(Admin admin);
         void AdminDelete(Admin admin);
         void AdminUpdate(Admin admin);
-        Admin GetById(int id);
+        Admin GetAdmin(Admin admin);
     }
 }

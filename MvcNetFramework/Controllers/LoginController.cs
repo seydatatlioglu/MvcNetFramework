@@ -1,4 +1,6 @@
-﻿using DataAccessLayer;
+﻿using BusinessLayer.Concrete;
+using DataAccessLayer;
+using DataAccessLayer.Concrete.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace MvcNetFramework.Controllers
 {
     public class LoginController : Controller
     {
-        
+        AdminManager adminManager = new AdminManager(new EfAdminDal());
         // GET: Login
         [HttpGet]
         public ActionResult Index()
@@ -21,9 +23,8 @@ namespace MvcNetFramework.Controllers
         [HttpPost]
         public ActionResult Index(Admin admin)
         {
-            Context c = new Context();
-            var adminUserInfo = c.Admins.FirstOrDefault(x => x.AdminUserName == admin.AdminUserName &&
-                                                        x.AdminPassword == admin.AdminPassword);
+
+            var adminUserInfo = adminManager.GetAdmin(admin);
             if (adminUserInfo!=null)
             {
                 FormsAuthentication.SetAuthCookie(adminUserInfo.AdminUserName,false);
@@ -35,6 +36,7 @@ namespace MvcNetFramework.Controllers
                 return RedirectToAction("Index");
             }
             return View();
+            
         }
     }
 }
